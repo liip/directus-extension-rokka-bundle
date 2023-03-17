@@ -8,5 +8,6 @@ export default defineInterface({
 	description: 'Check the Rokka credentials entered in the project settings.',
 	component: InterfaceComponent,
 	options: null,
+	hideLabel: true,
 	types: ['alias'],
 });
