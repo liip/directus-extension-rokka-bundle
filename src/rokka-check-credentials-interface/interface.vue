@@ -1,14 +1,12 @@
 <template>
-	<v-button @click="checkCurrentCredentials">
+	<v-button :full-width="true" @click="checkCurrentCredentials">
 		<template #default>
-			{{ t('check_credentials') }}
-		</template>
-		<template #append-outer>
 			<div class="status-indicator">
 				<v-progress-circular v-if="loading" indeterminate />
 				<v-icon v-if="!loading && valid === true" name="check" />
 				<v-icon v-if="!loading && valid === false" name="close" />
 			</div>
+			{{ t('check_credentials') }}
 		</template>
 	</v-button>
 </template>
@@ -58,6 +56,6 @@ const checkCurrentCredentials = async () => {
 </script>
 <style scoped>
 .status-indicator {
-	margin-left: 1rem;
+	margin-right: .5rem;
 }
 </style>
