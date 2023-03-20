@@ -1,5 +1,5 @@
 <template>
-	<v-button :full-width="true" @click="checkCurrentCredentials">
+	<v-button full-width @click="checkCurrentCredentials">
 		<template #default>
 			<div class="status-indicator">
 				<v-progress-circular v-if="loading" indeterminate />
