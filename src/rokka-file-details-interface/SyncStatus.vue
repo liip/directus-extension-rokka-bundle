@@ -1,14 +1,14 @@
 <template>
-	<v-notice :type="synchronized ? 'success' : 'warning'">
-		{{ synchronized ? t('file_synced') : t('file_not_synced') }}
+	<v-notice :type="synced ? 'success' : 'warning'">
+		{{ synced ? t('file_synced') : t('file_not_synced') }}
 	</v-notice>
 </template>
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 
-const props = defineProps({
-	hash: {
-		type: String,
+defineProps({
+	synced: {
+		type: Boolean,
 		required: true,
 	},
 });
@@ -25,6 +25,4 @@ const { t } = useI18n({
 		},
 	},
 });
-
-const synchronized = props.hash !== null;
 </script>
