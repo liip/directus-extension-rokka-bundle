@@ -1,13 +1,11 @@
 <template>
 	<v-button full-width @click="checkCurrentCredentials">
-		<template #default>
-			<div class="status-indicator">
-				<v-progress-circular v-if="loading" indeterminate />
-				<v-icon v-if="!loading && valid === true" name="check" />
-				<v-icon v-if="!loading && valid === false" name="close" />
-			</div>
-			{{ t('check_credentials') }}
-		</template>
+		<div class="status-indicator">
+			<v-progress-circular v-if="loading" indeterminate />
+			<v-icon v-if="!loading && valid === true" name="check" />
+			<v-icon v-if="!loading && valid === false" name="close" />
+		</div>
+		{{ t('check_credentials') }}
 	</v-button>
 </template>
 <script setup lang="ts">
