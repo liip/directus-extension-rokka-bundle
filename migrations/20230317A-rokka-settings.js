@@ -37,15 +37,16 @@ const removeColumn = async (knex, name) => {
 const removeFieldConfig = (knex, name) =>
 	knex(FIELDS_TABLE).where('collection', SETTINGS_TABLE).where('field', name).delete();
 
-const ROKKA_TITLE = 'rokka_title';
-const ORGANIZATION = 'organization';
-const API_KEY = 'api_key';
-const STACK_PREFIX = 'stack_prefix';
+const TITLE = 'rokka_title';
+const ORGANIZATION = 'rokka_organization';
+const API_KEY = 'rokka_api_key';
+const STACK_PREFIX = 'rokka_stack_prefix';
+const CHECK_CREDENTIALS = 'rokka_check_credentials';
 
 module.exports = {
 	async up(knex) {
 		// Rokka Settings Title
-		await addFieldConfig(knex, ROKKA_TITLE, {
+		await addFieldConfig(knex, TITLE, {
 			sort: 1,
 			special: 'alias,no-data',
 			interface: 'presentation-divider',
@@ -78,9 +79,17 @@ module.exports = {
 			translations:
 				'[{"language": "en-US", "translation": "Stack Prefix"}, {"language": "de-DE", "translation": "Stack-Präfix"}]',
 		});
+
+		await addFieldConfig(knex, CHECK_CREDENTIALS, {
+			sort: 5,
+			special: 'alias,no-data',
+			interface: 'rokka-check-credentials-interface',
+		});
 	},
 
 	async down(knex) {
+		await removeFieldConfig(knex, CHECK_CREDENTIALS);
+
 		await removeFieldConfig(knex, STACK_PREFIX);
 		await removeColumn(knex, STACK_PREFIX);
 
@@ -90,6 +99,6 @@ module.exports = {
 		await removeFieldConfig(knex, ORGANIZATION);
 		await removeColumn(knex, ORGANIZATION);
 
-		await removeFieldConfig(knex, ROKKA_TITLE);
+		await removeFieldConfig(knex, TITLE);
 	},
 };
