@@ -56,6 +56,6 @@ const checkCurrentCredentials = async () => {
 </script>
 <style scoped>
 .status-indicator {
-	margin-right: .5rem;
+	margin-right: 0.5rem;
 }
 </style>
