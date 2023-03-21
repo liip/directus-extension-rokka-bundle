@@ -9,4 +9,12 @@ const checkCredentials = async (rokkaClient: RokkaClient): Promise<boolean> => {
 	}
 };
 
-export { checkCredentials };
+const getImage = async (rokkaClient: RokkaClient, hash: string) => {
+	try {
+		return await rokkaClient.api.sourceimages.get(rokkaClient.organization, hash);
+	} catch (e) {
+		return null;
+	}
+};
+
+export { checkCredentials, getImage };

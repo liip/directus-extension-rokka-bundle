@@ -5,3 +5,8 @@ export interface RokkaClient {
 	organization: string;
 	api: RokkaApi;
 }
+
+export interface RokkaCredentialsResponse {
+	rokka_organization?: string;
+	rokka_api_key?: string;
+}
