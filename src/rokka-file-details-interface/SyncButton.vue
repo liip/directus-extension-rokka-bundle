@@ -15,8 +15,8 @@ import { useI18n } from 'vue-i18n';
 const props = defineProps({
 	rokkaClient: {
 		type: Object as PropType<RokkaClient>,
-		required: true
-	}
+		required: true,
+	},
 });
 
 const emit = defineEmits(['upload']);
@@ -41,9 +41,9 @@ const sync = async () => {
 	const imageData = await useDirectusImage(api, values.value.id);
 	const uploadedImage = await uploadImage(props.rokkaClient, values.value.filename_download, imageData);
 
-	emit('upload', uploadedImage?.hash)
+	emit('upload', uploadedImage?.hash);
 	loading.value = false;
-}
+};
 </script>
 <style scoped>
 .loader {

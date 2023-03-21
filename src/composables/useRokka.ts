@@ -25,7 +25,7 @@ const uploadImage = async (rokkaClient: RokkaClient, filename: string, data: str
 	} catch (e) {
 		return null;
 	}
-}
+};
 
 const removeImage = async (rokkaClient: RokkaClient, hash: string): Promise<boolean> => {
 	try {
@@ -34,6 +34,6 @@ const removeImage = async (rokkaClient: RokkaClient, hash: string): Promise<bool
 	} catch (e) {
 		return false;
 	}
-}
+};
 
 export { checkCredentials, getImage, uploadImage, removeImage };

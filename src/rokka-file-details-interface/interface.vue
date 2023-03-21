@@ -6,8 +6,13 @@
 		<div v-else>
 			<SyncStatus :synced="synced" />
 			<div class="image-settings">
-				<SyncedImageSettings v-if="synced" :rokkaClient="client" :hash="value" @update="(hash) => emit('input', hash)" />
-				<SyncButton v-else :rokkaClient="client" @upload="hash => emit('input', hash)" />
+				<SyncedImageSettings
+					v-if="synced"
+					:rokkaClient="client"
+					:hash="value"
+					@update="(hash) => emit('input', hash)"
+				/>
+				<SyncButton v-else :rokkaClient="client" @upload="(hash) => emit('input', hash)" />
 			</div>
 		</div>
 	</div>
@@ -46,23 +51,22 @@ const { t } = useI18n({
 
 const api = useApi();
 const client = ref<null | RokkaClient>(null);
-const rokkaImage = ref<null | Sourceimage>(null);
-const synced = computed(() => rokkaImage.value !== null);
+const imageMetadata = ref<null | Sourceimage>(null);
+const synced = computed(() => imageMetadata.value !== null);
 
 const getImageMetadata = async () => {
-	rokkaImage.value = props.value && client.value ? await getImage(client.value, props.value) : null;
-}
+	imageMetadata.value = props.value && client.value ? await getImage(client.value, props.value) : null;
+};
 
 onMounted(async () => {
 	client.value = await useRokkaClient(api);
 	getImageMetadata();
-
 });
 // Add watcher to update sync status if hash changed
 watch(props, getImageMetadata);
 </script>
 <style scoped>
 .image-settings {
-	margin-top: var(--form-vertical-gap)
+	margin-top: var(--form-vertical-gap);
 }
 </style>

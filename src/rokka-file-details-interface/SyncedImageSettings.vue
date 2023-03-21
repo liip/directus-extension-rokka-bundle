@@ -13,12 +13,12 @@ import { removeImage } from '../composables/useRokka';
 const props = defineProps({
 	rokkaClient: {
 		type: Object as PropType<RokkaClient>,
-		required: true
+		required: true,
 	},
 	hash: {
 		type: String,
 		required: true,
-	}
+	},
 });
 
 const emit = defineEmits(['update']);
@@ -43,7 +43,7 @@ const remove = async () => {
 		emit('update', null);
 	}
 	loading.value = false;
-}
+};
 </script>
 <style scoped>
 .loader {
