@@ -4,16 +4,16 @@
 			{{ t('missing_credentials') }}
 		</v-notice>
 		<div v-else>
-			<SyncStatus :synced="image !== null" />
+			<SyncStatus :synced="synced" />
 		</div>
 	</div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed, watch, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 import SyncStatus from './SyncStatus.vue';
 import { RokkaClient } from '../types/types';
-import { useRokkaClient } from '../composables/useClient';
+import { useRokkaClient } from '../composables/useRokkaClient';
 import { getImage } from '../composables/useRokka';
 import { RokkaResponse } from 'rokka/dist/response';
 
@@ -23,6 +23,7 @@ const props = defineProps({
 		default: null,
 	},
 });
+
 const emit = defineEmits(['input']);
 
 const { t } = useI18n({
@@ -36,11 +37,21 @@ const { t } = useI18n({
 	},
 });
 
+const values = inject('values', ref<Record<string, any>>({}));
+
 const client = ref<null | RokkaClient>(null);
-const image = ref<null | RokkaResponse>(null);
+const rokkaImage = ref<null | RokkaResponse>(null);
+const synced = computed(() => rokkaImage.value !== null);
+
+const getImageMetadata = async () => {
+	rokkaImage.value = props.value && client.value ? await getImage(client.value, props.value) : null;
+}
 
 onMounted(async () => {
 	client.value = await useRokkaClient();
-	image.value = props.value && client.value ? await getImage(client.value, props.value) : null;
+	getImageMetadata();
 });
+// Add watcher to update sync status if hash changed
+watch(props, getImageMetadata);
+
 </script>

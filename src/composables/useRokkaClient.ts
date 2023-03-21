@@ -1,6 +1,6 @@
 import rokka from 'rokka';
 import { RokkaClient } from '../types/types';
-import { getCredentials } from './useCredentials';
+import { useCredentials } from './useCredentials';
 
 const useRokkaClientWithCredentials = (organization: string, apiKey: string): RokkaClient => {
 	const rokkaApi = rokka({
@@ -15,7 +15,7 @@ const useRokkaClientWithCredentials = (organization: string, apiKey: string): Ro
 };
 
 const useRokkaClient = async (): Promise<RokkaClient | null> => {
-	const credentials = await getCredentials();
+	const credentials = await useCredentials();
 	const { rokka_organization, rokka_api_key } = credentials;
 
 	if (rokka_organization && rokka_api_key) {

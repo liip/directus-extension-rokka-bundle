@@ -11,7 +11,7 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRokkaClientWithCredentials } from '../composables/useClient';
+import { useRokkaClientWithCredentials } from '../composables/useRokkaClient';
 import { checkCredentials } from '../composables/useRokka';
 
 // Add local translations to existing vueI18n instance
