@@ -1,52 +1,26 @@
 <template>
-	<v-button full-width @click="remove">
-		<v-progress-circular v-if="loading" class="loader" indeterminate />
-		{{ t('remove') }}
-	</v-button>
+	<RemoveButton
+		:rokkaClient="rokkaClient"
+		:hash="image.hash"
+		@input="(hash) => emit('input', hash)"
+	/>
 </template>
 <script setup lang="ts">
-import { PropType, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { Sourceimage } from 'rokka/dist/apis/sourceimages';
+import { PropType } from 'vue';
 import { RokkaClient } from '../types/types';
-import { removeImage } from '../composables/useRokka';
+import RemoveButton from './removeButton.vue'
 
-const props = defineProps({
+defineProps({
 	rokkaClient: {
 		type: Object as PropType<RokkaClient>,
 		required: true,
 	},
-	hash: {
-		type: String,
+	image: {
+		type: Object as PropType<Sourceimage>,
 		required: true,
 	},
 });
 
-const emit = defineEmits(['update']);
-
-const { t } = useI18n({
-	messages: {
-		'de-DE': {
-			remove: 'Bild entfernen',
-		},
-		'en-US': {
-			remove: 'Remove image',
-		},
-	},
-});
-
-const loading = ref(false);
-
-const remove = async () => {
-	loading.value = true;
-	const removed = await removeImage(props.rokkaClient, props.hash);
-	if (removed) {
-		emit('update', null);
-	}
-	loading.value = false;
-};
+const emit = defineEmits(['input']);
 </script>
-<style scoped>
-.loader {
-	margin-right: 0.5rem;
-}
-</style>

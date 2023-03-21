@@ -9,10 +9,10 @@
 				<SyncedImageSettings
 					v-if="synced"
 					:rokkaClient="client"
-					:hash="value"
-					@update="(hash) => emit('input', hash)"
+					:image="imageMetadata"
+					@input="(hash) => emit('input', hash)"
 				/>
-				<SyncButton v-else :rokkaClient="client" @upload="(hash) => emit('input', hash)" />
+				<SyncButton v-else :rokkaClient="client" @input="(hash) => emit('input', hash)" />
 			</div>
 		</div>
 	</div>
