@@ -1,3 +1,4 @@
+import { Sourceimage } from 'rokka/dist/apis/sourceimages';
 import { RokkaClient } from '../types/types';
 
 const checkCredentials = async (rokkaClient: RokkaClient): Promise<boolean> => {
@@ -9,7 +10,7 @@ const checkCredentials = async (rokkaClient: RokkaClient): Promise<boolean> => {
 	}
 };
 
-const getImage = async (rokkaClient: RokkaClient, hash: string) => {
+const getImage = async (rokkaClient: RokkaClient, hash: string): Promise<Sourceimage | null> => {
 	try {
 		const response = await rokkaClient.api.sourceimages.get(rokkaClient.organization, hash);
 		return response.body;
@@ -18,10 +19,10 @@ const getImage = async (rokkaClient: RokkaClient, hash: string) => {
 	}
 };
 
-const uploadImage = async (rokkaClient: RokkaClient, filename: string, data: string) => {
+const uploadImage = async (rokkaClient: RokkaClient, filename: string, data: string): Promise<Sourceimage | null> => {
 	try {
 		const response = await rokkaClient.api.sourceimages.create(rokkaClient.organization, filename, data);
-		return response.body.items[0];
+		return response.body.items[0] ?? null;
 	} catch (e) {
 		return null;
 	}
