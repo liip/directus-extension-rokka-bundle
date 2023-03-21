@@ -1,4 +1,5 @@
 import rokka from 'rokka';
+import { AxiosInstance } from 'axios';
 import { RokkaClient } from '../types/types';
 import { useCredentials } from './useCredentials';
 
@@ -14,8 +15,8 @@ const useRokkaClientWithCredentials = (organization: string, apiKey: string): Ro
 	};
 };
 
-const useRokkaClient = async (): Promise<RokkaClient | null> => {
-	const credentials = await useCredentials();
+const useRokkaClient = async (api: AxiosInstance): Promise<RokkaClient | null> => {
+	const credentials = await useCredentials(api);
 	const { rokka_organization, rokka_api_key } = credentials;
 
 	if (rokka_organization && rokka_api_key) {
