@@ -9,14 +9,14 @@
 				v-if="imageMetadata && synced"
 				:rokkaClient="rokkaClient"
 				:imageMetadata="imageMetadata"
-				@input="(hash) => emit('input', hash)"
+				@input="save"
 			/>
-			<SyncButton v-else :rokkaClient="rokkaClient" @input="(hash) => emit('input', hash)" />
+			<SyncButton v-else :rokkaClient="rokkaClient" @input="save" />
 		</div>
 	</div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed, watch, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { RokkaClient } from '../types/types';
 import { getRokkaClient } from '../utils/rokkaClient';
@@ -26,6 +26,7 @@ import SyncStatus from './components/SyncStatus.vue';
 import SyncButton from './components/SyncButton.vue';
 import SyncedImageSettings from './components/SyncedImageSettings.vue';
 import { useApi } from '@directus/extensions-sdk';
+import { setRokkaHash } from './utils/rokkaHash';
 
 const props = defineProps({
 	value: {
@@ -33,8 +34,6 @@ const props = defineProps({
 		default: null,
 	},
 });
-
-const emit = defineEmits(['input']);
 
 const { t } = useI18n({
 	messages: {
@@ -48,13 +47,21 @@ const { t } = useI18n({
 });
 
 const api = useApi();
+const values = inject('values', ref<Record<string, any>>({}));
+
+const hash = ref(props.value);
+const save = async (newHash: string) => {
+	const updatedHash = await setRokkaHash(api, values.value.id, newHash);
+	hash.value = updatedHash;
+}
+
 const rokkaClient = ref<null | RokkaClient>(null);
 const imageMetadata = ref<null | Sourceimage>(null);
 const synced = computed(() => imageMetadata.value !== null);
 
 const getImageMetadata = async () => {
 	imageMetadata.value =
-		props.value && rokkaClient.value ? await rokkaGetImageMetadata(rokkaClient.value, props.value) : null;
+		hash.value && rokkaClient.value ? await rokkaGetImageMetadata(rokkaClient.value, hash.value) : null;
 };
 
 onMounted(async () => {
@@ -62,5 +69,5 @@ onMounted(async () => {
 	getImageMetadata();
 });
 // Add watcher to update sync status if hash changed
-watch(props, getImageMetadata);
+watch(hash, getImageMetadata);
 </script>
