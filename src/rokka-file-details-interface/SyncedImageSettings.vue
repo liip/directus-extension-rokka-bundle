@@ -2,9 +2,9 @@
 	<RemoveButton
 		:rokkaClient="rokkaClient"
 		:hash="image.hash"
-		@input="(hash) => emit('input', hash)"
+		@input="reemit"
 	/>
-	<FocusPointSelector :rokkaClient="rokkaClient" :image="image" />
+	<FocusPointSelector :rokkaClient="rokkaClient" :image="image" @input="reemit" />
 </template>
 <script setup lang="ts">
 import { Sourceimage } from 'rokka/dist/apis/sourceimages';
@@ -25,4 +25,6 @@ defineProps({
 });
 
 const emit = defineEmits(['input']);
+
+const reemit = (hash) => emit('input', hash);
 </script>

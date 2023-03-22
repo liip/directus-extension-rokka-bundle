@@ -1,5 +1,5 @@
 import { Sourceimage } from 'rokka/dist/apis/sourceimages';
-import { RokkaClient } from '../types/types';
+import { FocusPoint, RokkaClient } from '../types/types';
 
 const checkCredentials = async (rokkaClient: RokkaClient): Promise<boolean> => {
 	try {
@@ -37,4 +37,31 @@ const removeImage = async (rokkaClient: RokkaClient, hash: string): Promise<bool
 	}
 };
 
-export { checkCredentials, getImage, uploadImage, removeImage };
+const setFocusPoint = async (rokkaClient: RokkaClient, hash: string, focusPoint: FocusPoint) => {
+	try {
+		const response = await rokkaClient.api.sourceimages.setSubjectArea(
+			rokkaClient.organization,
+			hash,
+			{
+				width: 1,
+				height: 1,
+				...focusPoint
+			},
+			{ deletePrevious: false },
+		);
+		return response.body;
+	} catch (e) {
+		return null;
+	}
+}
+
+const removeFocusPoint = async (rokkaClient: RokkaClient, hash: string) => {
+	try {
+		const response = await rokkaClient.api.sourceimages.removeSubjectArea(rokkaClient.organization, hash);
+		return response.body;
+	} catch (e) {
+		return null;
+	}
+}
+
+export { checkCredentials, getImage, uploadImage, removeImage, setFocusPoint, removeFocusPoint };
