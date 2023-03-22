@@ -45,15 +45,15 @@ const setFocusPoint = async (rokkaClient: RokkaClient, hash: string, focusPoint:
 			{
 				width: 1,
 				height: 1,
-				...focusPoint
+				...focusPoint,
 			},
-			{ deletePrevious: false },
+			{ deletePrevious: false }
 		);
 		return response.body;
 	} catch (e) {
 		return null;
 	}
-}
+};
 
 const removeFocusPoint = async (rokkaClient: RokkaClient, hash: string) => {
 	try {
@@ -62,6 +62,6 @@ const removeFocusPoint = async (rokkaClient: RokkaClient, hash: string) => {
 	} catch (e) {
 		return null;
 	}
-}
+};
 
 export { checkCredentials, getImage, uploadImage, removeImage, setFocusPoint, removeFocusPoint };

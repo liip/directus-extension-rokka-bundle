@@ -1,16 +1,12 @@
 <template>
 	<div class="focus-picker-container">
-		<img class="focus-picker" :src="imageUrl" @load="e => setupFocusPicker(e.target)"/>
+		<img class="focus-picker" :src="imageUrl" @load="(e) => setupFocusPicker(e.target)" />
 	</div>
 	<v-button full-width @click="setFocus">
 		<v-progress-circular v-if="loadingSetFocus" class="loader" indeterminate />
 		Set
 	</v-button>
-	<v-button
-		:disabled="!props.image.dynamic_metadata?.subject_area"
-		full-width
-		@click="removeFocus"
-	>
+	<v-button full-width @click="removeFocus" :disabled="!props.image.dynamic_metadata?.subject_area">
 		<v-progress-circular v-if="loadingRemoveFocus" class="loader" indeterminate />
 		Remove
 	</v-button>
@@ -40,27 +36,26 @@ const emit = defineEmits(['input']);
 const api = useApi();
 const accessToken = api.defaults.headers.common['Authorization']?.split(' ')[1] || null;
 const values = inject('values', ref<Record<string, any>>({}));
-const imageUrl = `/assets/${values.value.id}?access_token=${accessToken}`
+const imageUrl = `/assets/${values.value.id}?access_token=${accessToken}`;
 
-const focusPicker = ref<HTMLImageElement | null>(null);
 const focusPoint = ref<FocusPoint>();
 
 const initialFocusPoint = {
 	y: useFromImageCoordinates(props.image.dynamic_metadata?.subject_area?.y, props.image.height),
 	x: useFromImageCoordinates(props.image.dynamic_metadata?.subject_area?.x, props.image.width),
-}
+};
 
 const setupFocusPicker = (element: HTMLImageElement) => {
 	new FocusPicker(element, {
-		onChange: focus => {
+		onChange: (focus) => {
 			focusPoint.value = {
 				y: useToImageCoordinates(focus.y, props.image.height),
 				x: useToImageCoordinates(focus.x, props.image.width),
 			};
 		},
 		focus: initialFocusPoint,
-	})
-}
+	});
+};
 
 const loadingSetFocus = ref(false);
 const setFocus = async () => {
@@ -70,7 +65,7 @@ const setFocus = async () => {
 		emit('input', response.hash);
 		loadingSetFocus.value = false;
 	}
-}
+};
 
 const loadingRemoveFocus = ref(false);
 const removeFocus = async () => {
@@ -78,7 +73,7 @@ const removeFocus = async () => {
 	const response = await removeFocusPoint(props.rokkaClient, props.image.hash);
 	emit('input', response.hash);
 	loadingRemoveFocus.value = false;
-}
+};
 </script>
 <style scoped>
 .loader {
