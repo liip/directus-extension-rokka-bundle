@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
 
-const useDirectusImage = async (api: AxiosInstance, id: string): Promise<Blob> => {
+const getDirectusImage = async (api: AxiosInstance, id: string): Promise<Blob> => {
 	const response = await api.get(`/assets/${id}`, { responseType: 'blob' });
 
 	if (response.status === 200) {
@@ -10,4 +10,4 @@ const useDirectusImage = async (api: AxiosInstance, id: string): Promise<Blob> =
 	}
 };
 
-export { useDirectusImage };
+export { getDirectusImage };

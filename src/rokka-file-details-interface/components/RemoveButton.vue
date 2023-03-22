@@ -7,8 +7,8 @@
 <script setup lang="ts">
 import { PropType, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { RokkaClient } from '../types/types';
-import { removeImage } from '../composables/useRokka';
+import { RokkaClient } from '../../types/types';
+import { removeImage } from '../../composables/useRokka';
 
 const props = defineProps({
 	rokkaClient: {

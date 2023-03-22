@@ -7,9 +7,9 @@
 <script setup lang="ts">
 import { PropType, ref, inject } from 'vue';
 import { useApi } from '@directus/extensions-sdk';
-import { RokkaClient } from '../types/types';
-import { useDirectusImage } from '../composables/useDirectusImage';
-import { uploadImage } from '../composables/useRokka';
+import { RokkaClient } from '../../types/types';
+import { getDirectusImage } from '../utils/directusImage';
+import { uploadImage } from '../../composables/useRokka';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
@@ -38,7 +38,7 @@ const loading = ref(false);
 
 const sync = async () => {
 	loading.value = true;
-	const imageData = await useDirectusImage(api, values.value.id);
+	const imageData = await getDirectusImage(api, values.value.id);
 	const uploadedImage = await uploadImage(props.rokkaClient, values.value.filename_download, imageData);
 
 	emit('upload', uploadedImage?.hash);
