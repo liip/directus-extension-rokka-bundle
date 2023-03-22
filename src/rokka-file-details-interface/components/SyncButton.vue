@@ -9,7 +9,7 @@ import { PropType, ref, inject } from 'vue';
 import { useApi } from '@directus/extensions-sdk';
 import { RokkaClient } from '../../types/types';
 import { getDirectusImage } from '../utils/directusImage';
-import { uploadImage } from '../../composables/useRokka';
+import { uploadImage } from '../../utils/rokka';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({

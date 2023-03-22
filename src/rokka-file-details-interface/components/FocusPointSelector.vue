@@ -17,7 +17,7 @@ import { FocusPoint, RokkaClient } from '../../types/types';
 import { FocusPicker } from 'image-focus';
 import { Sourceimage } from 'rokka/dist/apis/sourceimages';
 import { useApi } from '@directus/extensions-sdk';
-import { setFocusPoint, removeFocusPoint } from '../../composables/useRokka';
+import { setFocusPoint, removeFocusPoint } from '../../utils/rokka';
 import { fromImageCoordinates, toImageCoordinates } from '../utils/focalPoint';
 import { getDirectusAccessToken } from '../utils/directusAccessToken';
 import { useI18n } from 'vue-i18n';
