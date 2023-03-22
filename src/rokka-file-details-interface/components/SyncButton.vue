@@ -1,5 +1,5 @@
 <template>
-	<v-button full-width @click="sync">
+	<v-button full-width @click="sync" class="button">
 		<v-progress-circular v-if="loading" class="loader" indeterminate />
 		{{ t('synchronize') }}
 	</v-button>
@@ -19,7 +19,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(['upload']);
+const emit = defineEmits(['input']);
 
 const { t } = useI18n({
 	messages: {
@@ -41,11 +41,15 @@ const sync = async () => {
 	const imageData = await getDirectusImage(api, values.value.id);
 	const uploadedImage = await uploadImage(props.rokkaClient, values.value.filename_download, imageData);
 
-	emit('upload', uploadedImage?.hash);
+	emit('input', uploadedImage?.hash);
 	loading.value = false;
 };
 </script>
 <style scoped>
+.button {
+	margin-bottom: 1rem;
+}
+
 .loader {
 	margin-right: 0.5rem;
 }

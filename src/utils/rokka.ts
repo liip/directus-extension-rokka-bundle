@@ -19,7 +19,7 @@ const getImageMetadata = async (rokkaClient: RokkaClient, hash: string): Promise
 	}
 };
 
-const uploadImage = async (rokkaClient: RokkaClient, filename: string, data: string): Promise<Sourceimage | null> => {
+const uploadImage = async (rokkaClient: RokkaClient, filename: string, data: Blob): Promise<Sourceimage | null> => {
 	try {
 		const response = await rokkaClient.api.sourceimages.create(rokkaClient.organization, filename, data);
 		return response.body.items[0] ?? null;

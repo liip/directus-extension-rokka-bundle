@@ -5,15 +5,13 @@
 		</v-notice>
 		<div v-else>
 			<SyncStatus :synced="synced" />
-			<div class="image-settings">
-				<SyncedImageSettings
-					v-if="imageMetadata && synced"
-					:rokkaClient="rokkaClient"
-					:imageMetadata="imageMetadata"
-					@input="(hash) => emit('input', hash)"
-				/>
-				<SyncButton v-else :rokkaClient="rokkaClient" @input="(hash) => emit('input', hash)" />
-			</div>
+			<SyncedImageSettings
+				v-if="imageMetadata && synced"
+				:rokkaClient="rokkaClient"
+				:imageMetadata="imageMetadata"
+				@input="(hash) => emit('input', hash)"
+			/>
+			<SyncButton v-else :rokkaClient="rokkaClient" @input="(hash) => emit('input', hash)" />
 		</div>
 	</div>
 </template>
@@ -66,8 +64,3 @@ onMounted(async () => {
 // Add watcher to update sync status if hash changed
 watch(props, getImageMetadata);
 </script>
-<style scoped>
-.image-settings {
-	margin-top: var(--form-vertical-gap);
-}
-</style>

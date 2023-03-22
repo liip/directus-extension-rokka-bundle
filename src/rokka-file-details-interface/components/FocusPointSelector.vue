@@ -2,14 +2,16 @@
 	<div class="focus-picker-container">
 		<img class="focus-picker" :src="imageUrl" @load="(e) => setupFocusPicker(e.target as HTMLImageElement)" />
 	</div>
-	<v-button full-width @click="setFocus">
-		<v-progress-circular v-if="loadingSetFocus" class="loader" indeterminate />
-		{{ t('set_focuspoint') }}
-	</v-button>
-	<v-button full-width @click="removeFocus" :disabled="isFocusPointSet">
-		<v-progress-circular v-if="loadingRemoveFocus" class="loader" indeterminate />
-		{{ t('remove_focuspoint') }}
-	</v-button>
+	<div class="controls">
+		<v-button full-width @click="setFocus">
+			<v-progress-circular v-if="loadingSetFocus" class="loader" indeterminate />
+			{{ t('set_focuspoint') }}
+		</v-button>
+		<v-button full-width @click="removeFocus" :disabled="isFocusPointSet">
+			<v-progress-circular v-if="loadingRemoveFocus" class="loader" indeterminate />
+			{{ t('remove_focuspoint') }}
+		</v-button>
+	</div>
 </template>
 <script setup lang="ts">
 import { PropType, ref, inject, computed } from 'vue';
@@ -91,16 +93,23 @@ const removeFocus = async () => {
 };
 </script>
 <style scoped>
-.loader {
-	margin-right: 0.5rem;
-}
-
 .focus-picker-container {
 	width: fit-content;
 	margin: auto;
+	margin-bottom: 1rem;
 }
 
 .focus-picker {
 	max-height: 500px;
+}
+
+.controls {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	column-gap: 1rem;
+}
+
+.loader {
+	margin-right: 0.5rem;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<v-button full-width @click="remove">
+	<v-button full-width @click="remove" class="button">
 		<v-progress-circular v-if="loading" class="loader" indeterminate />
 		{{ t('remove') }}
 	</v-button>
@@ -46,6 +46,10 @@ const remove = async () => {
 };
 </script>
 <style scoped>
+.button {
+	margin-bottom: 1rem;
+}
+
 .loader {
 	margin-right: 0.5rem;
 }
