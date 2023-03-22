@@ -10,3 +10,8 @@ export interface RokkaCredentialsResponse {
 	rokka_organization?: string;
 	rokka_api_key?: string;
 }
+
+export interface FocusPoint {
+	x: number;
+	y: number;
+}
