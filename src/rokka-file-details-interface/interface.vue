@@ -55,9 +55,8 @@ const imageMetadata = ref<null | Sourceimage>(null);
 const synced = computed(() => imageMetadata.value !== null);
 
 const getImageMetadata = async () => {
-	imageMetadata.value = props.value && rokkaClient.value
-		? await rokkaGetImageMetadata(rokkaClient.value, props.value)
-		: null;
+	imageMetadata.value =
+		props.value && rokkaClient.value ? await rokkaGetImageMetadata(rokkaClient.value, props.value) : null;
 };
 
 onMounted(async () => {

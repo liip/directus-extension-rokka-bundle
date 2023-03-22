@@ -52,17 +52,11 @@ const values = inject('values', ref<Record<string, any>>({}));
 const api = useApi();
 const imageUrl = `/assets/${values.value.id}?access_token=${getDirectusAccessToken(api)}`;
 
-const isFocusPointSet = computed(() => !props.imageMetadata.dynamic_metadata?.subject_area)
+const isFocusPointSet = computed(() => !props.imageMetadata.dynamic_metadata?.subject_area);
 const focusPoint = ref<FocusPoint>();
 const initialFocusPoint = {
-	y: fromImageCoordinates(
-		props.imageMetadata.dynamic_metadata?.subject_area?.y,
-		props.imageMetadata.height
-	),
-	x: fromImageCoordinates(
-		props.imageMetadata.dynamic_metadata?.subject_area?.x,
-		props.imageMetadata.width
-	),
+	y: fromImageCoordinates(props.imageMetadata.dynamic_metadata?.subject_area?.y, props.imageMetadata.height),
+	x: fromImageCoordinates(props.imageMetadata.dynamic_metadata?.subject_area?.x, props.imageMetadata.width),
 };
 
 const setupFocusPicker = (element: HTMLImageElement) => {
