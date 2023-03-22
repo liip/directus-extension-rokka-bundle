@@ -53,7 +53,7 @@ const hash = ref(props.value);
 const save = async (newHash: string) => {
 	const updatedHash = await setRokkaHash(api, values.value.id, newHash);
 	hash.value = updatedHash;
-}
+};
 
 const rokkaClient = ref<null | RokkaClient>(null);
 const imageMetadata = ref<null | Sourceimage>(null);
