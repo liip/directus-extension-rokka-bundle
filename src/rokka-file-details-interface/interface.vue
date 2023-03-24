@@ -53,7 +53,7 @@ const values = inject('values', ref<Record<string, any>>({}));
 const hasAllowedMIMEType = computed(() => allowedMIMETypes.includes(values.value.type))
 
 const hash = ref(props.value);
-const loading = ref(false);
+const loading = ref(true);
 const save = async (newHash: string) => {
 	loading.value = true;
 	const updatedHash = await setRokkaHash(api, values.value.id, newHash);
