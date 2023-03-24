@@ -4,7 +4,7 @@
 			{{ t('missing_credentials') }}
 		</v-notice>
 		<div v-else>
-			<SyncStatus :synced="synced" />
+			<SyncStatus :synced="synced" :loading="loading" />
 			<SyncedImageSettings
 				v-if="imageMetadata && synced"
 				:rokkaClient="rokkaClient"
@@ -50,9 +50,12 @@ const api = useApi();
 const values = inject('values', ref<Record<string, any>>({}));
 
 const hash = ref(props.value);
+const loading = ref(false);
 const save = async (newHash: string) => {
+	loading.value = true;
 	const updatedHash = await setRokkaHash(api, values.value.id, newHash);
 	hash.value = updatedHash;
+	loading.value = false;
 };
 
 const rokkaClient = ref<null | RokkaClient>(null);
@@ -60,8 +63,10 @@ const imageMetadata = ref<null | Sourceimage>(null);
 const synced = computed(() => imageMetadata.value !== null);
 
 const getImageMetadata = async () => {
+	loading.value = true;
 	imageMetadata.value =
 		hash.value && rokkaClient.value ? await rokkaGetImageMetadata(rokkaClient.value, hash.value) : null;
+	loading.value = false;
 };
 
 onMounted(async () => {
