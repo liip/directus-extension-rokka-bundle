@@ -11,8 +11,8 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRokkaClientWithCredentials } from '../composables/useRokkaClient';
-import { checkCredentials } from '../composables/useRokka';
+import { getRokkaClientWithCredentials } from '../utils/rokkaClient';
+import { checkCredentials } from '../utils/rokka';
 
 // Add local translations to existing vueI18n instance
 const { t } = useI18n({
@@ -38,7 +38,7 @@ const checkCurrentCredentials = async () => {
 	const { rokka_organization, rokka_api_key } = values.value;
 
 	if (rokka_organization && rokka_api_key) {
-		const rokkaClient = useRokkaClientWithCredentials(rokka_organization, rokka_api_key);
+		const rokkaClient = getRokkaClientWithCredentials(rokka_organization, rokka_api_key);
 		const areCredentialsValid = await checkCredentials(rokkaClient);
 
 		if (areCredentialsValid) {
