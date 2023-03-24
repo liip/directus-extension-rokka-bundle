@@ -1,17 +1,19 @@
 <template>
 	<div>
-		<v-notice v-if="rokkaClient === null">
+		<v-notice v-if="client === null">
 			{{ t('missing_credentials') }}
 		</v-notice>
 		<div v-else>
 			<SyncStatus :synced="synced" />
-			<SyncedImageSettings
-				v-if="imageMetadata && synced"
-				:rokkaClient="rokkaClient"
-				:imageMetadata="imageMetadata"
-				@input="(hash) => emit('input', hash)"
-			/>
-			<SyncButton v-else :rokkaClient="rokkaClient" @input="(hash) => emit('input', hash)" />
+			<div class="image-settings">
+				<SyncedImageSettings
+					v-if="synced"
+					:rokkaClient="client"
+					:image="imageMetadata"
+					@input="(hash) => emit('input', hash)"
+				/>
+				<SyncButton v-else :rokkaClient="client" @input="(hash) => emit('input', hash)" />
+			</div>
 		</div>
 	</div>
 </template>
@@ -19,12 +21,12 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { RokkaClient } from '../types/types';
-import { getRokkaClient } from '../utils/rokkaClient';
-import { getImageMetadata as rokkaGetImageMetadata } from '../utils/rokka';
+import { useRokkaClient } from '../composables/useRokkaClient';
+import { getImage } from '../composables/useRokka';
 import { Sourceimage } from 'rokka/dist/apis/sourceimages';
-import SyncStatus from './components/SyncStatus.vue';
-import SyncButton from './components/SyncButton.vue';
-import SyncedImageSettings from './components/SyncedImageSettings.vue';
+import SyncStatus from './SyncStatus.vue';
+import SyncButton from './SyncButton.vue';
+import SyncedImageSettings from './SyncedImageSettings.vue';
 import { useApi } from '@directus/extensions-sdk';
 
 const props = defineProps({
@@ -48,19 +50,23 @@ const { t } = useI18n({
 });
 
 const api = useApi();
-const rokkaClient = ref<null | RokkaClient>(null);
+const client = ref<null | RokkaClient>(null);
 const imageMetadata = ref<null | Sourceimage>(null);
 const synced = computed(() => imageMetadata.value !== null);
 
 const getImageMetadata = async () => {
-	imageMetadata.value =
-		props.value && rokkaClient.value ? await rokkaGetImageMetadata(rokkaClient.value, props.value) : null;
+	imageMetadata.value = props.value && client.value ? await getImage(client.value, props.value) : null;
 };
 
 onMounted(async () => {
-	rokkaClient.value = await getRokkaClient(api);
+	client.value = await useRokkaClient(api);
 	getImageMetadata();
 });
 // Add watcher to update sync status if hash changed
 watch(props, getImageMetadata);
 </script>
+<style scoped>
+.image-settings {
+	margin-top: var(--form-vertical-gap);
+}
+</style>
