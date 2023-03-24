@@ -1,5 +1,5 @@
 <template>
-	<v-notice :type="synced ? 'success' : 'warning'">
+	<v-notice :type="synced ? 'success' : 'warning'" class="status">
 		{{ synced ? t('file_synced') : t('file_not_synced') }}
 	</v-notice>
 </template>
@@ -26,3 +26,8 @@ const { t } = useI18n({
 	},
 });
 </script>
+<style scoped>
+.status {
+	margin-bottom: 1rem;
+}
+</style>
