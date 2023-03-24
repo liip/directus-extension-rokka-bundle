@@ -42,6 +42,7 @@ const ORGANIZATION = 'rokka_organization';
 const API_KEY = 'rokka_api_key';
 const STACK_PREFIX = 'rokka_stack_prefix';
 const CHECK_CREDENTIALS = 'rokka_check_credentials';
+const SYNCHRONIZE_PRESETS = 'rokka_synchronize_presets';
 
 module.exports = {
 	async up(knex) {
@@ -85,9 +86,17 @@ module.exports = {
 			special: 'alias,no-data',
 			interface: 'rokka-check-credentials-interface',
 		});
+
+		await addFieldConfig(knex, SYNCHRONIZE_PRESETS, {
+			sort: 6,
+			special: 'alias,no-data',
+			interface: 'rokka-synchronize-presets-interface',
+		});
 	},
 
 	async down(knex) {
+		await removeFieldConfig(knex, SYNCHRONIZE_PRESETS);
+
 		await removeFieldConfig(knex, CHECK_CREDENTIALS);
 
 		await removeFieldConfig(knex, STACK_PREFIX);

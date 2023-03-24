@@ -18,6 +18,11 @@
 				"type": "interface",
 				"name": "rokka-file-details-interface",
 				"source": "src/rokka-file-details-interface/index.ts"
+			},
+			{
+				"type": "interface",
+				"name": "rokka-synchronize-presets-interface",
+				"source": "src/rokka-synchronize-presets-interface/index.ts"
 			}
 		]
 	},
