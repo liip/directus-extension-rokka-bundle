@@ -10,7 +10,7 @@ const checkCredentials = async (rokkaClient: RokkaClient): Promise<boolean> => {
 	}
 };
 
-const getImageMetadata = async (rokkaClient: RokkaClient, hash: string): Promise<Sourceimage | null> => {
+const getImage = async (rokkaClient: RokkaClient, hash: string): Promise<Sourceimage | null> => {
 	try {
 		const response = await rokkaClient.api.sourceimages.get(rokkaClient.organization, hash);
 		return response.body;
@@ -19,7 +19,7 @@ const getImageMetadata = async (rokkaClient: RokkaClient, hash: string): Promise
 	}
 };
 
-const uploadImage = async (rokkaClient: RokkaClient, filename: string, data: Blob): Promise<Sourceimage | null> => {
+const uploadImage = async (rokkaClient: RokkaClient, filename: string, data: string): Promise<Sourceimage | null> => {
 	try {
 		const response = await rokkaClient.api.sourceimages.create(rokkaClient.organization, filename, data);
 		return response.body.items[0] ?? null;
@@ -64,4 +64,4 @@ const removeFocusPoint = async (rokkaClient: RokkaClient, hash: string) => {
 	}
 };
 
-export { checkCredentials, getImageMetadata, uploadImage, removeImage, setFocusPoint, removeFocusPoint };
+export { checkCredentials, getImage, uploadImage, removeImage, setFocusPoint, removeFocusPoint };

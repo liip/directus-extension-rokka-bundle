@@ -1,5 +1,5 @@
 <template>
-	<v-button full-width @click="remove" class="button">
+	<v-button full-width @click="remove">
 		<v-progress-circular v-if="loading" class="loader" indeterminate />
 		{{ t('remove') }}
 	</v-button>
@@ -7,8 +7,8 @@
 <script setup lang="ts">
 import { PropType, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { RokkaClient } from '../../types/types';
-import { removeImage } from '../../utils/rokka';
+import { RokkaClient } from '../types/types';
+import { removeImage } from '../composables/useRokka';
 
 const props = defineProps({
 	rokkaClient: {
@@ -46,10 +46,6 @@ const remove = async () => {
 };
 </script>
 <style scoped>
-.button {
-	margin-bottom: 1rem;
-}
-
 .loader {
 	margin-right: 0.5rem;
 }

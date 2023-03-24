@@ -1,4 +1,4 @@
-const fromImageCoordinates = (coordinate: number | undefined, range: number) => {
+const useFromImageCoordinates = (coordinate: number | undefined, range: number) => {
 	// Set focal point to center if none defined
 	if (coordinate === undefined) {
 		return 0;
@@ -9,7 +9,7 @@ const fromImageCoordinates = (coordinate: number | undefined, range: number) => 
 	return valueInCorrectRange;
 };
 
-const toImageCoordinates = (value: number, range: number) => {
+const useToImageCoordinates = (value: number, range: number) => {
 	// Convert to range 0-1
 	const valueAsUnitVector = (value + 1) / 2;
 	// Clamp value, since library sometimes returns less than -1
@@ -21,4 +21,4 @@ const toImageCoordinates = (value: number, range: number) => {
 	return Math.floor(valueClamped * range);
 };
 
-export { fromImageCoordinates, toImageCoordinates };
+export { useFromImageCoordinates, useToImageCoordinates };

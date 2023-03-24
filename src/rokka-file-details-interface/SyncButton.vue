@@ -1,5 +1,5 @@
 <template>
-	<v-button full-width @click="sync" class="button">
+	<v-button full-width @click="sync">
 		<v-progress-circular v-if="loading" class="loader" indeterminate />
 		{{ t('synchronize') }}
 	</v-button>
@@ -7,9 +7,9 @@
 <script setup lang="ts">
 import { PropType, ref, inject } from 'vue';
 import { useApi } from '@directus/extensions-sdk';
-import { RokkaClient } from '../../types/types';
-import { getDirectusImage } from '../utils/directusImage';
-import { uploadImage } from '../../utils/rokka';
+import { RokkaClient } from '../types/types';
+import { useDirectusImage } from '../composables/useDirectusImage';
+import { uploadImage } from '../composables/useRokka';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
@@ -19,7 +19,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(['input']);
+const emit = defineEmits(['upload']);
 
 const { t } = useI18n({
 	messages: {
@@ -38,18 +38,14 @@ const loading = ref(false);
 
 const sync = async () => {
 	loading.value = true;
-	const imageData = await getDirectusImage(api, values.value.id);
+	const imageData = await useDirectusImage(api, values.value.id);
 	const uploadedImage = await uploadImage(props.rokkaClient, values.value.filename_download, imageData);
 
-	emit('input', uploadedImage?.hash);
+	emit('upload', uploadedImage?.hash);
 	loading.value = false;
 };
 </script>
 <style scoped>
-.button {
-	margin-bottom: 1rem;
-}
-
 .loader {
 	margin-right: 0.5rem;
 }
