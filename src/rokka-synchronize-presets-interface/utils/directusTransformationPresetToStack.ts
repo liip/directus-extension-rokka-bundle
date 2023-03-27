@@ -44,7 +44,7 @@ const transformationPresetToStack = (
 			mode: 'ratio',
 			width: transformationPreset.width,
 			height: transformationPreset.height,
-		}
+		},
 	};
 
 	const letterboxing: StackOperation = {
@@ -54,16 +54,14 @@ const transformationPresetToStack = (
 			secondary_color: '000000',
 			width: transformationPreset.width,
 			height: transformationPreset.height,
-		}
-	}
+		},
+	};
 
 	const operations: StackOperation[] = [];
 	if (transformationPreset.width || transformationPreset.height) {
 		operations.push(resize);
 	}
-	if (
-		transformationPreset.width && transformationPreset.height
-	) {
+	if (transformationPreset.width && transformationPreset.height) {
 		if (!transformationPreset.fit || transformationPreset.fit === 'cover') {
 			operations.push(crop);
 		}
