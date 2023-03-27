@@ -1,5 +1,4 @@
 import { SettingsStorageAssetPreset } from '@directus/shared/types';
-import { transformStyle } from '@vue/compiler-dom';
 import { StackOperation, StackOptions } from 'rokka/dist/apis/stacks';
 import { RokkaStack } from '../../types/types';
 
