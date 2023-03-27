@@ -50,7 +50,7 @@ const allowedMIMETypes = ['image/gif', 'image/jpg', 'image/jpeg', 'image/png'];
 
 const api = useApi();
 const values = inject('values', ref<Record<string, any>>({}));
-const hasAllowedMIMEType = computed(() => allowedMIMETypes.includes(values.value.type))
+const hasAllowedMIMEType = computed(() => allowedMIMETypes.includes(values.value.type));
 
 const hash = ref(props.value);
 const loading = ref(true);
