@@ -23,15 +23,37 @@ const diffTransformationPresets = (
 			const presetOptions = transformationPresetAsStack.stack_options;
 			const existingOptions = existingSyncedStack.stack_options;
 
-			const presetOperation = transformationPresetAsStack.stack_operations[0]?.options;
-			const existingOperation = existingSyncedStack.stack_operations[0]?.options;
+			const presetResizeOperation = transformationPresetAsStack.stack_operations
+				.find(operation => operation.name === 'resize')?.options;
+			const existingResizeOperation = existingSyncedStack.stack_operations
+				.find(operation => operation.name === 'resize')?.options;
+
+			const presetCropOperation = transformationPresetAsStack.stack_operations
+				.find(operation => operation.name === 'crop');
+			const existingCropOperation = existingSyncedStack.stack_operations
+				.find(operation => operation.name === 'crop');
+			// Either both values are undefined, or both are defined
+			const isCropUnchanged =
+				(presetCropOperation == null && existingCropOperation == null) ||
+				(presetCropOperation != null && existingCropOperation != null)
+
+			const presetCompositionOperation = transformationPresetAsStack.stack_operations
+				.find(operation => operation.name === 'composition');
+			const existingCompositionOperation = existingSyncedStack.stack_operations
+				.find(operation => operation.name === 'composition');
+			// Either both values are undefined, or both are defined
+			const isCompositionUnchanged =
+			(presetCompositionOperation == null && existingCompositionOperation == null) ||
+			(presetCompositionOperation != null && existingCompositionOperation != null)
 
 			const isStackUnchanged =
 				presetOptions['optim.quality'] === existingOptions['optim.quality'] &&
-				presetOperation?.mode === existingOperation?.mode &&
-				presetOperation?.width === existingOperation?.width &&
-				presetOperation?.height === existingOperation?.height &&
-				presetOperation?.upscale === existingOperation?.upscale;
+				presetResizeOperation?.mode === existingResizeOperation?.mode &&
+				presetResizeOperation?.width === existingResizeOperation?.width &&
+				presetResizeOperation?.height === existingResizeOperation?.height &&
+				presetResizeOperation?.upscale === existingResizeOperation?.upscale &&
+				isCropUnchanged &&
+				isCompositionUnchanged;
 
 			if (isStackUnchanged) {
 				return {
