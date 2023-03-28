@@ -79,6 +79,7 @@ module.exports = {
 			options: '{"iconLeft": "abc"}',
 			translations:
 				'[{"language": "en-US", "translation": "Stack Prefix"}, {"language": "de-DE", "translation": "Stack-Präfix"}]',
+			note: 'The Stack Prefix is prepended to the key of the transformation presets when synchronising them to Rokka',
 		});
 
 		await addFieldConfig(knex, CHECK_CREDENTIALS, {
