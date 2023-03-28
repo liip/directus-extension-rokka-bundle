@@ -1,5 +1,4 @@
 import { Sourceimage } from 'rokka/dist/apis/sourceimages';
-import { StackConfig, StackOperation } from 'rokka/dist/apis/stacks';
 import { FocusPoint, RokkaClient, RokkaStack } from '../types/types';
 
 const checkCredentials = async (rokkaClient: RokkaClient): Promise<boolean> => {
