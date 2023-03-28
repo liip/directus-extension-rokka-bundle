@@ -1,5 +1,6 @@
 import { Sourceimage } from 'rokka/dist/apis/sourceimages';
-import { FocusPoint, RokkaClient } from '../types/types';
+import { StackConfig, StackOperation } from 'rokka/dist/apis/stacks';
+import { FocusPoint, RokkaClient, RokkaStack } from '../types/types';
 
 const checkCredentials = async (rokkaClient: RokkaClient): Promise<boolean> => {
 	try {
@@ -37,7 +38,11 @@ const removeImage = async (rokkaClient: RokkaClient, hash: string): Promise<bool
 	}
 };
 
-const setFocusPoint = async (rokkaClient: RokkaClient, hash: string, focusPoint: FocusPoint) => {
+const setFocusPoint = async (
+	rokkaClient: RokkaClient,
+	hash: string,
+	focusPoint: FocusPoint
+): Promise<Sourceimage | null> => {
 	try {
 		const response = await rokkaClient.api.sourceimages.setSubjectArea(
 			rokkaClient.organization,
@@ -55,7 +60,7 @@ const setFocusPoint = async (rokkaClient: RokkaClient, hash: string, focusPoint:
 	}
 };
 
-const removeFocusPoint = async (rokkaClient: RokkaClient, hash: string) => {
+const removeFocusPoint = async (rokkaClient: RokkaClient, hash: string): Promise<Sourceimage | null> => {
 	try {
 		const response = await rokkaClient.api.sourceimages.removeSubjectArea(rokkaClient.organization, hash);
 		return response.body;
@@ -64,4 +69,55 @@ const removeFocusPoint = async (rokkaClient: RokkaClient, hash: string) => {
 	}
 };
 
-export { checkCredentials, getImageMetadata, uploadImage, removeImage, setFocusPoint, removeFocusPoint };
+const getStacks = async (rokkaClient: RokkaClient): Promise<RokkaStack[]> => {
+	try {
+		const response = await rokkaClient.api.stacks.list(rokkaClient.organization);
+		return response.body.items;
+	} catch (e) {
+		return [];
+	}
+};
+
+const createStack = async (rokkaClient: RokkaClient, rokkaStack: RokkaStack): Promise<boolean> => {
+	try {
+		await rokkaClient.api.stacks.create(rokkaClient.organization, rokkaStack.name, {
+			operations: rokkaStack.stack_operations,
+			options: rokkaStack.stack_options,
+		});
+		return true;
+	} catch (e) {
+		return false;
+	}
+};
+
+const deleteStack = async (rokkaClient: RokkaClient, stackName: string): Promise<boolean> => {
+	try {
+		await rokkaClient.api.stacks.delete(rokkaClient.organization, stackName);
+		return true;
+	} catch (e) {
+		return false;
+	}
+};
+
+const updateStack = async (rokkaClient: RokkaClient, rokkaStack: RokkaStack): Promise<boolean> => {
+	try {
+		await deleteStack(rokkaClient, rokkaStack.name);
+		await createStack(rokkaClient, rokkaStack);
+		return true;
+	} catch (e) {
+		return false;
+	}
+};
+
+export {
+	checkCredentials,
+	getImageMetadata,
+	uploadImage,
+	removeImage,
+	setFocusPoint,
+	removeFocusPoint,
+	getStacks,
+	createStack,
+	deleteStack,
+	updateStack,
+};
