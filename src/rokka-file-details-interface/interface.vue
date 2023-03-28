@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<v-notice v-if="rokkaClient === null">
-			{{ t('missing_credentials') }}
+		<v-notice v-if="rokkaClient === null || !hasAllowedMIMEType">
+			{{ t('rokka_unavailable') }}
 		</v-notice>
 		<div v-else>
 			<SyncStatus :synced="synced" :loading="loading" />
@@ -38,19 +38,22 @@ const props = defineProps({
 const { t } = useI18n({
 	messages: {
 		'de-DE': {
-			missing_credentials: 'Die Zugangsdaten für Rokka konnten nicht geladen werden',
+			rokka_unavailable: 'Die Rokka erweiterung ist nicht verfügbar',
 		},
 		'en-US': {
-			missing_credentials: 'The Rokka Credentials could not be retrieved',
+			rokka_unavailable: 'The Rokka extension is not available',
 		},
 	},
 });
 
+const allowedMIMETypes = ['image/gif', 'image/jpg', 'image/jpeg', 'image/png'];
+
 const api = useApi();
 const values = inject('values', ref<Record<string, any>>({}));
+const hasAllowedMIMEType = computed(() => allowedMIMETypes.includes(values.value.type));
 
 const hash = ref(props.value);
-const loading = ref(false);
+const loading = ref(true);
 const save = async (newHash: string) => {
 	loading.value = true;
 	const updatedHash = await setRokkaHash(api, values.value.id, newHash);
