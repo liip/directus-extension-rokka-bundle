@@ -52,7 +52,7 @@ const setFocusPoint = async (
 				height: 1,
 				...focusPoint,
 			},
-			{ deletePrevious: false }
+			{ deletePrevious: true }
 		);
 		return response.body;
 	} catch (e) {
@@ -62,7 +62,9 @@ const setFocusPoint = async (
 
 const removeFocusPoint = async (rokkaClient: RokkaClient, hash: string): Promise<Sourceimage | null> => {
 	try {
-		const response = await rokkaClient.api.sourceimages.removeSubjectArea(rokkaClient.organization, hash);
+		const response = await rokkaClient.api.sourceimages.removeSubjectArea(rokkaClient.organization, hash, {
+			deletePrevious: true,
+		});
 		return response.body;
 	} catch (e) {
 		return null;
