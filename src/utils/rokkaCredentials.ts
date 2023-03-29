@@ -7,7 +7,7 @@ const getRokkaCredentials = async (api: AxiosInstance): Promise<RokkaCredentials
 	if (response.status === 200) {
 		return response.data.data;
 	} else {
-		throw new Error("Couldn't fetch Rokka credentials from Directus settings");
+		return {};
 	}
 };
 

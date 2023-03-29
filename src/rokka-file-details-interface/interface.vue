@@ -1,9 +1,10 @@
 <template>
 	<div>
-		<v-notice v-if="rokkaClient === null || !hasAllowedMIMEType">
-			{{ t('rokka_unavailable') }}
+		<Error v-if="error" />
+		<v-notice v-if="!hasAllowedMIMEType">
+			{{ t('wrong_filetype') }}
 		</v-notice>
-		<div v-else>
+		<div v-else-if="rokkaClient">
 			<SyncStatus :synced="synced" :loading="loading" />
 			<SyncedImageSettings
 				v-if="imageMetadata && synced"
@@ -27,6 +28,7 @@ import SyncButton from './components/SyncButton.vue';
 import SyncedImageSettings from './components/SyncedImageSettings.vue';
 import { useApi } from '@directus/extensions-sdk';
 import { setRokkaHash } from './utils/rokkaHash';
+import Error from '../components/Error.vue';
 
 const props = defineProps({
 	value: {
@@ -38,10 +40,10 @@ const props = defineProps({
 const { t } = useI18n({
 	messages: {
 		'de-DE': {
-			rokka_unavailable: 'Die Rokka erweiterung ist nicht verfügbar',
+			wrong_filetype: 'Die Rokka erweiterung ist für diesen Dateityp nicht verfügbar',
 		},
 		'en-US': {
-			rokka_unavailable: 'The Rokka extension is not available',
+			wrong_filetype: 'The Rokka extension is not available for this file type',
 		},
 	},
 });
@@ -52,23 +54,35 @@ const api = useApi();
 const values = inject('values', ref<Record<string, any>>({}));
 const hasAllowedMIMEType = computed(() => allowedMIMETypes.includes(values.value.type));
 
-const hash = ref(props.value);
+const error = ref(false);
+
 const loading = ref(true);
+const hash = ref(props.value);
 const save = async (newHash: string) => {
+	error.value = false;
 	loading.value = true;
-	const updatedHash = await setRokkaHash(api, values.value.id, newHash);
-	hash.value = updatedHash;
+	try {
+		const updatedHash = await setRokkaHash(api, values.value.id, newHash);
+		hash.value = updatedHash;
+	} catch (e) {
+		error.value = true;
+	}
 	loading.value = false;
 };
 
-const rokkaClient = ref<null | RokkaClient>(null);
+const rokkaClient = ref<RokkaClient>();
 const imageMetadata = ref<null | Sourceimage>(null);
 const synced = computed(() => imageMetadata.value !== null);
 
 const getImageMetadata = async () => {
+	error.value = false;
 	loading.value = true;
-	imageMetadata.value =
-		hash.value && rokkaClient.value ? await rokkaGetImageMetadata(rokkaClient.value, hash.value) : null;
+	try {
+		imageMetadata.value =
+			hash.value && rokkaClient.value ? await rokkaGetImageMetadata(rokkaClient.value, hash.value) : null;
+	} catch (e) {
+		error.value = true;
+	}
 	loading.value = false;
 };
 

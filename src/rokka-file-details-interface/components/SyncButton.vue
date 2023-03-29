@@ -1,5 +1,6 @@
 <template>
 	<v-button full-width @click="sync" class="button">
+		<Error v-if="error" />
 		<v-progress-circular v-if="loading" class="loader" indeterminate />
 		{{ t('synchronize') }}
 	</v-button>
@@ -11,6 +12,7 @@ import { RokkaClient } from '../../types/types';
 import { getDirectusImage } from '../utils/directusImage';
 import { uploadImage } from '../../utils/rokka';
 import { useI18n } from 'vue-i18n';
+import Error from '../../components/Error.vue';
 
 const props = defineProps({
 	rokkaClient: {
@@ -34,14 +36,19 @@ const { t } = useI18n({
 
 const api = useApi();
 const values = inject('values', ref<Record<string, any>>({}));
+const error = ref(false);
 const loading = ref(false);
 
 const sync = async () => {
+	error.value = false;
 	loading.value = true;
-	const imageData = await getDirectusImage(api, values.value.id);
-	const uploadedImage = await uploadImage(props.rokkaClient, values.value.filename_download, imageData);
-
-	emit('input', uploadedImage?.hash);
+	try {
+		const imageData = await getDirectusImage(api, values.value.id);
+		const uploadedImage = await uploadImage(props.rokkaClient, values.value.filename_download, imageData);
+		emit('input', uploadedImage?.hash);
+	} catch (e) {
+		error.value = true;
+	}
 	loading.value = false;
 };
 </script>
