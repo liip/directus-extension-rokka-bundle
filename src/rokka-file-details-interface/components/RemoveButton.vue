@@ -1,5 +1,6 @@
 <template>
 	<v-button full-width @click="remove" class="button">
+		<Error v-if="error" />
 		<v-progress-circular v-if="loading" class="loader" indeterminate />
 		{{ t('remove') }}
 	</v-button>
@@ -7,6 +8,7 @@
 <script setup lang="ts">
 import { PropType, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import Error from '../../components/Error.vue';
 import { RokkaClient } from '../../types/types';
 import { removeImage } from '../../utils/rokka';
 
@@ -34,13 +36,17 @@ const { t } = useI18n({
 	},
 });
 
+const error = ref(false);
 const loading = ref(false);
 
 const remove = async () => {
+	error.value = false;
 	loading.value = true;
-	const removed = await removeImage(props.rokkaClient, props.hash);
-	if (removed) {
+	try {
+		await removeImage(props.rokkaClient, props.hash);
 		emit('input', null);
+	} catch (e) {
+		error.value = true;
 	}
 	loading.value = false;
 };

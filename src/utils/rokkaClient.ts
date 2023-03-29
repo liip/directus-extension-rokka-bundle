@@ -15,15 +15,11 @@ const getRokkaClientWithCredentials = (organization: string, apiKey: string): Ro
 	};
 };
 
-const getRokkaClient = async (api: AxiosInstance): Promise<RokkaClient | null> => {
+const getRokkaClient = async (api: AxiosInstance): Promise<RokkaClient> => {
 	const credentials = await getRokkaCredentials(api);
 	const { rokka_organization, rokka_api_key } = credentials;
 
-	if (rokka_organization && rokka_api_key) {
-		return getRokkaClientWithCredentials(rokka_organization, rokka_api_key);
-	} else {
-		throw new Error('Couldnt retrieve Rokka credentials');
-	}
+	return getRokkaClientWithCredentials(rokka_organization ?? '', rokka_api_key ?? '');
 };
 
 export { getRokkaClient, getRokkaClientWithCredentials };

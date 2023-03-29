@@ -4,11 +4,13 @@
 	</div>
 	<div class="controls">
 		<v-button full-width @click="setFocus">
-			<v-progress-circular v-if="loadingSetFocus" class="loader" indeterminate />
+			<Error v-if="setFocusError" />
+			<v-progress-circular v-if="setFocusLoading" class="loader" indeterminate />
 			{{ t('set_focuspoint') }}
 		</v-button>
 		<v-button full-width @click="removeFocus" :disabled="isFocusPointSet">
-			<v-progress-circular v-if="loadingRemoveFocus" class="loader" indeterminate />
+			<Error v-if="removeFocusError" />
+			<v-progress-circular v-if="removeFocusLoading" class="loader" indeterminate />
 			{{ t('remove_focuspoint') }}
 		</v-button>
 	</div>
@@ -23,6 +25,7 @@ import { setFocusPoint, removeFocusPoint } from '../../utils/rokka';
 import { fromImageCoordinates, toImageCoordinates } from '../utils/focalPoint';
 import { getDirectusAccessToken } from '../utils/directusAccessToken';
 import { useI18n } from 'vue-i18n';
+import Error from '../../components/Error.vue';
 
 const props = defineProps({
 	rokkaClient: {
@@ -73,23 +76,35 @@ const setupFocusPicker = (element: HTMLImageElement) => {
 	});
 };
 
-const loadingSetFocus = ref(false);
-const loadingRemoveFocus = ref(false);
+const setFocusError = ref(false);
+const setFocusLoading = ref(false);
+const removeFocusError = ref(false);
+const removeFocusLoading = ref(false);
 
 const setFocus = async () => {
 	if (focusPoint.value) {
-		loadingSetFocus.value = true;
-		const response = await setFocusPoint(props.rokkaClient, props.imageMetadata.hash, focusPoint.value);
-		emit('input', response.hash);
-		loadingSetFocus.value = false;
+		setFocusError.value = false;
+		setFocusLoading.value = true;
+		try {
+			const response = await setFocusPoint(props.rokkaClient, props.imageMetadata.hash, focusPoint.value);
+			emit('input', response.hash);
+		} catch (e) {
+			setFocusError.value = true;
+		}
+		setFocusLoading.value = false;
 	}
 };
 
 const removeFocus = async () => {
-	loadingRemoveFocus.value = true;
-	const response = await removeFocusPoint(props.rokkaClient, props.imageMetadata.hash);
-	emit('input', response.hash);
-	loadingRemoveFocus.value = false;
+	removeFocusError.value = false;
+	removeFocusLoading.value = true;
+	try {
+		const response = await removeFocusPoint(props.rokkaClient, props.imageMetadata.hash);
+		emit('input', response.hash);
+	} catch (e) {
+		removeFocusError.value = true;
+	}
+	removeFocusLoading.value = false;
 };
 </script>
 <style scoped>
