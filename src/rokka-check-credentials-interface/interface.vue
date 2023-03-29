@@ -18,7 +18,7 @@ import { checkCredentials } from '../utils/rokka';
 const { t } = useI18n({
 	messages: {
 		'de-DE': {
-			check_credentials: 'Zugansdaten überprüfen',
+			check_credentials: 'Zugangsdaten überprüfen',
 		},
 		'en-US': {
 			check_credentials: 'Check credentials',
